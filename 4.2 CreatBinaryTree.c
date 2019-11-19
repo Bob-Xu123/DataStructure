@@ -24,7 +24,7 @@ struct QueueStr {
 };
 typedef struct QueueStr* Queue;
 
-//函数：创建一个队列，和堆栈一样，链式队列可以带一空的头结点，表头结点后面的第一个结点是队列的头
+//函数：创建一个队列
 Queue CreatQueue() {
 	Queue Q = (Queue)malloc(sizeof(struct QueueStr));
 	Q->Front = NULL;
