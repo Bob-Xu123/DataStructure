@@ -1,10 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-// 建立二叉树涉及队列，首先将队列的相关函数copy过来
+struct TNodeStr {
+	int Data;
+	struct TNodeStr* Left;
+	struct TNodeStr* Right;
+};
+typedef struct TNodeStr* PtrToTNode;
+typedef PtrToTNode BinTree;
+
+// 建立二叉树涉及队列，首先将队列的相关函数copy过来，这里需要修改队列中的数据类型为指向树节点的指针
 
 struct QNode {
-	int value;
+	PtrToTNode T;
 	struct QNode* next;
 };
 typedef struct QNode* PtrToQNode;
@@ -29,9 +38,9 @@ bool isEmpty(Queue Q) {
 }
 
 //函数：往队列中加一个元素
-void AddQ(Queue Q, int E) {
+void AddQ(Queue Q, PtrToTNode E) {
 	PtrToQNode temp = (PtrToQNode)malloc(sizeof(struct QNode));
-	temp->value = E;
+	temp->T = E;
 	temp->next = NULL;
 	if ( isEmpty(Q) ) {
 		Q->Front = temp;
@@ -44,20 +53,66 @@ void AddQ(Queue Q, int E) {
 }
 
 //函数：从队列中删除一个元素
-int DeleteQ(Queue Q) {
+PtrToTNode DeleteQ(Queue Q) {
 	if ( isEmpty(Q) ) {
 		printf("The Queue is empty so cannot delete\n");
-		return -404;
+		return NULL;
 	}
 	else {
 		PtrToQNode TopCell = Q->Front;
 		Q->Front = TopCell->next;
 		if (Q->Front == NULL) //如果队列中只有一个结点，被删后Front变为了NULL，Rear也要置为NULL
 			Q->Rear = NULL;
-		int E = TopCell->value;
+		PtrToTNode E = TopCell->T;
 		free(TopCell);
 		return E;
 	}
 }
 
 //下面开始根据层序输入序列，构建二叉树
+
+BinTree CreatBinTree()
+{
+	int data;
+	BinTree BT, T;
+	Queue Q = CreatQueue();
+
+	//建立第一个节点，即根节点
+	scanf("%d", &data);
+	if (data != 0) {
+		BT = (PtrToTNode)malloc(sizeof(BT));
+		BT->Data = data;
+		BT->Left = BT->Right = NULL;
+		AddQ(Q, BT);
+	}
+	else
+		return NULL;
+
+	while( !isEmpty(Q) ) {
+		T = DeleteQ(Q);
+		scanf("%d", &data);
+		if (data){
+			T->Left = (PtrToTNode)malloc(sizeof(struct TNodeStr));
+			T->Left->Data = data;
+			T->Left->Left = T->Left->Right = NULL;
+			AddQ(Q, T->Left);
+		}
+		else
+			T->Left = NULL;
+
+		scanf("%d", &data);
+		if (data) {
+			T->Right = (PtrToTNode)malloc(sizeof(struct TNodeStr));
+			T->Right->Data = data;
+			T->Right->Left = T->Right->Right = NULL;
+			AddQ(Q, T->Right);
+		}
+		else
+			T->Right = NULL;
+	}
+	return BT;
+}
+
+int main() {
+	BinTree BT = CreatBinTree();
+}
