@@ -13,9 +13,9 @@ void Merge(int A[], int TempA[], int L, int R, int REnd)
 		if (A[L] > A[R])
 			TempA[i++] = A[R++];
 	}
-	for( ; L<=LEnd; )
-		TempA[i++] = A[L++];
-	for( ; R<=REnd; )
+	for( ; L<=LEnd; L++)
+		TempA[i++] = A[L];
+	while( R<=REnd ) //对比观察两种风格
 		TempA[i++] = A[R++];
 	//将有序的TempA[]复制回A[]
 	for(i=0; i<Num; i++, REnd--)
