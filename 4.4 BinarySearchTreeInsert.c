@@ -10,7 +10,7 @@ struct TNodeStr
 typedef struct TNodeStr* TNode;
 typedef TNode BinTree;
 
-
+//为了方便，新增结点总是作为叶结点插入到一个二叉搜索树中。
 BinTree Insert(BinTree BST, int E)
 {
 	if( BST == NULL ) {
