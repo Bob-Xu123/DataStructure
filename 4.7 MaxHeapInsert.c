@@ -27,3 +27,38 @@ MaxHeap CreateHeap(int MaxSize)
 }
 
 //函数：最大堆的插入
+bool isFull(MaxHeap H)
+{
+	return (H->CurrentSize == H->Capacity);
+}
+
+bool Insert(MaxHeap H, int E)
+{
+	if ( isFull(H) )
+		return false;
+	else {
+		int Me = H->CurrentSize + 1;
+		int Father = Me/2;
+		while(E > H->Data[Father]) {
+			H->Data[Me] = H->Data[Father];
+			Me = Father;
+			Father = Father/2;
+		} // 数组的index：Me和Father其实可以用一者就够了，因为它们之间有关系，但是这里我用了两个，理解起来更清晰。
+		H->Data[Me] = E;
+		H->CurrentSize++;
+		return true;
+	}
+}
+
+
+// 主函数*********************************************************
+int main() {
+	MaxHeap H = CreateHeap(7);
+	int A[] = {MAXDATA,44,25,31,18,10};
+	H->Data = A;
+	H->CurrentSize = 5;
+
+	Insert(H, 58);
+	for (int i=0; i<= H->CurrentSize; i++)
+		printf("%d ", H->Data[i]);
+}
